@@ -1,0 +1,25 @@
+pipeline {
+	agent any 
+	options {
+		skipStagesAfterUnstable()
+	}
+	stages {
+		stage("Get configuration") {
+			steps {
+				sh ( 
+				 	"mvn dependency:get \
+				 	    -Dartifact=${params.SERVICE_GROUP}:${params.SERVICE_INFRASTRUCTURE_ARTIFACT}:${params.SERVICE_VERSION} && \
+			 	    jar xf \"${JENKINS_HOME}/.m2/repository/`echo ${params.SERVICE_GROUP} | sed -e 's/\\./\\//g'`/${params.SERVICE_INFRASTRUCTURE_ARTIFACT}/${params.SERVICE_VERSION}/${params.SERVICE_INFRASTRUCTURE_ARTIFACT}-${params.SERVICE_VERSION}.jar\""
+				)
+			}
+		}
+		stage("Deploy modules") {
+			steps {
+				sh ( 
+					"operational_utils_dcos_deploy_service \
+						-d . -c cluster-cli-production -p ${params.PROFILE}"
+				)
+			}
+		}
+	}
+}

@@ -1,0 +1,75 @@
+{
+	"id": "infrastructure-continuous-integration-service",
+	"cpus": 1,
+	"disk": 5120,
+	"instances": 1,
+	"mem": 1024,
+	"networks": [
+		{
+			"mode": "container/bridge"
+		}
+	],
+	"args": [],
+	"container": {
+		"portMappings": [
+			{
+				"containerPort": 8080,
+				"labels": {
+					"VIP_0": "/infrastructure-continuous-integration-service:8080"
+				}
+			},
+			{
+				"containerPort": 50000,
+				"labels": {
+					"VIP_0": "/infrastructure-continuous-integration-service:50000"
+				}
+			}
+		],
+		"type": "DOCKER",
+		"volumes": [
+			{
+				"containerPath": "/var/run/docker.sock",
+				"hostPath": "/var/run/docker.sock",
+				"mode": "RW"
+			},
+			{
+				"containerPath": "/var/jenkins_home",
+				"mode": "RW",
+				"external": {
+					"name": "infrastructure-continuous-integration-service-config",
+					"provider": "dvdi",
+					"options": {
+						"dvdi/driver": "rexray"
+					}
+				}
+			}
+		],
+		"docker": {
+			"image": "coldis/infrastructure-continuous-integration-service",
+			"forcePullImage": true,
+			"parameters": []
+		}
+	},
+	"env": {
+		"GIT_USER_NAME": "",
+		"GIT_USER_EMAIL": "",
+		"MAVEN_REPOSITORY_ID": "",
+		"MAVEN_REPOSITORY_URL": "",
+		"MAVEN_USER_NAME": "",
+		"MAVEN_USER_PASSWORD": "",
+		"START_DCOS_CLI": "true",
+		"JAVA_OPTS": "-Dhudson.footerURL=http://continuous-integration-service.governance.technology.coldis.org"
+	},
+	"healthChecks": [],
+	"upgradeStrategy": {
+		"minimumHealthCapacity": 0,
+		"maximumOverCapacity": 0
+	},
+	"constraints": [
+		[
+			"zone",
+			"IS",
+			"us-east-1a"
+		]
+	]
+}

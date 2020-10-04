@@ -1,0 +1,1 @@
+0 * * * * set -a; . /var/jenkins_home/docker_env;  set +a; jenkins_configure --debug >> /proc/1/fd/1 2>&1
