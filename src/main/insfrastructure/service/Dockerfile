@@ -2,15 +2,22 @@
 FROM coldis/infrastructure-service-cluster-cli AS service-cluster-cli
 
 # From Jenkins.
-FROM jenkins/jenkins:2.262-jdk11
+FROM jenkins/jenkins:2.271-jdk11
 
 # Sets the user to root.
 USER root
 
 # Changes locale and timezone.
-RUN cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && \
+ENV TZ=America/Sao_Paulo \
+	LANG_FILE=pt_BR.UTF-8 \
+	LANG=pt_BR.utf8 \
+	LANGUAGE=pt_BR:pt \
+	LC_ALL=pt_BR.UTF-8
+RUN rm -f /usr/share/locale/locale.alias && \
+	ln -s /etc/locale.alias /usr/share/locale/locale.alias && \
+	localedef -i pt_BR -c -f UTF-8 -A /usr/share/locale/locale.alias ${LANG_FILE} && \
+	cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
 	apt-get purge -y locales
-ENV TZ=America/Sao_Paulo
 
 # Installs basic tools and languages.
 RUN apt-get update -y && \
@@ -25,14 +32,17 @@ RUN apt-get update -y && \
 	add-apt-repository -y \
 		"deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
 	apt-get update -y && \
-	apt-get install -y docker-ce=5:18.09.7~3-0~debian-stretch docker-ce-cli=5:18.09.7~3-0~debian-stretch && \
+	apt-get install -y docker-ce docker-ce-cli && \
 	usermod -aG docker jenkins && \
 	systemctl enable docker && \
-	curl -sL https://deb.nodesource.com/setup_10.x | bash - && \	
+	apt-get install -y jq cron gosu zip unzip jq git && \
+	apt-get install -y maven && \
+	apt-get install -y python3 python3-pip && \
+	pip3 install twine && \
+	curl -sL https://deb.nodesource.com/setup_12.x | bash - && \	
 	apt-get install -y nodejs && \
 	npm cache clean -f && \
 	npm install -g n && \
-	apt-get install -y git maven jq cron gosu zip unzip && \
 	apt-get autoremove -y && \
 	apt-get clean -y && \
 	rm -rf /var/lib/apt/lists/*
