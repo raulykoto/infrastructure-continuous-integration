@@ -133,6 +133,7 @@ password = ${PYPI_USER_PASSWORD}
 
 EOF
 
+	mkdir -p .pyp
 	tee .pyp/pip.conf <<EOF
 	
 [global]
