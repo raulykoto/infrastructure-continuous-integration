@@ -101,6 +101,49 @@ EOF
 
 fi
 
+
+# If there is PyPi information.
+if env | grep "PYPI_REPOSITORY_ID=" && [ ! -z "${PYPI_REPOSITORY_ID}" ]
+then
+	
+	# Configures PyPi.
+	${DEBUG} && echo "Configuring PyPi in continuous integration"
+	tee .pypirc <<EOF
+	
+[distutils]
+index-servers =
+    ${PYPI_REPOSITORY_ID}
+    ${PYPI_RELEASES_REPOSITORY_ID}
+    ${PYPI_SNAPSHOTS_REPOSITORY_ID}
+
+[${PYPI_REPOSITORY_ID}]
+repository = https://${PYPI_REPOSITORY_URL}
+username = ${PYPI_USER_NAME}
+password = ${PYPI_USER_PASSWORD}
+
+[${PYPI_RELEASES_REPOSITORY_ID}]
+repository = https://${PYPI_RELEASES_REPOSITORY_URL}
+username = ${PYPI_USER_NAME}
+password = ${PYPI_USER_PASSWORD}
+
+[${PYPI_SNAPSHOTS_REPOSITORY_ID}]
+repository = https://${PYPI_SNAPSHOTS_REPOSITORY_URL}
+username = ${PYPI_USER_NAME}
+password = ${PYPI_USER_PASSWORD}
+
+EOF
+
+	tee .pyp/pip.conf <<EOF
+	
+[global]
+index = https://${PYPI_USER_NAME}:${PYPI_USER_PASSWORD}@${PYPI_REPOSITORY_URL}/pypi
+index-url = https://${PYPI_USER_NAME}:${PYPI_USER_PASSWORD}@${PYPI_REPOSITORY_URL}/simple
+
+EOF
+
+fi
+
+
 # If there Docker information.
 if env | grep "DOCKER_USER_NAME=" && [ ! -z "${DOCKER_USER_NAME}" ]
 then
