@@ -117,17 +117,17 @@ index-servers =
     ${PYPI_SNAPSHOTS_REPOSITORY_ID}
 
 [${PYPI_REPOSITORY_ID}]
-repository = https://${PYPI_REPOSITORY_URL}
+repository = http://${PYPI_REPOSITORY_URL}
 username = ${PYPI_USER_NAME}
 password = ${PYPI_USER_PASSWORD}
 
 [${PYPI_RELEASES_REPOSITORY_ID}]
-repository = https://${PYPI_RELEASES_REPOSITORY_URL}
+repository = http://${PYPI_RELEASES_REPOSITORY_URL}
 username = ${PYPI_USER_NAME}
 password = ${PYPI_USER_PASSWORD}
 
 [${PYPI_SNAPSHOTS_REPOSITORY_ID}]
-repository = https://${PYPI_SNAPSHOTS_REPOSITORY_URL}
+repository = http://${PYPI_SNAPSHOTS_REPOSITORY_URL}
 username = ${PYPI_USER_NAME}
 password = ${PYPI_USER_PASSWORD}
 
@@ -137,8 +137,8 @@ EOF
 	tee .pyp/pip.conf <<EOF
 	
 [global]
-index = https://${PYPI_USER_NAME}:${PYPI_USER_PASSWORD}@${PYPI_REPOSITORY_URL}/pypi
-index-url = https://${PYPI_USER_NAME}:${PYPI_USER_PASSWORD}@${PYPI_REPOSITORY_URL}/simple
+index = http://${PYPI_USER_NAME}:${PYPI_USER_PASSWORD}@${PYPI_REPOSITORY_URL}/pypi
+index-url = http://${PYPI_USER_NAME}:${PYPI_USER_PASSWORD}@${PYPI_REPOSITORY_URL}/simple
 
 EOF
 
