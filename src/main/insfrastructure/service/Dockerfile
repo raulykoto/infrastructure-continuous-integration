@@ -91,8 +91,19 @@ RUN chown -R jenkins:jenkins ${JENKINS_SCRIPT} && \
 		chown jenkins:jenkins ${FILE} && \	
 		mv -- "${FILE}" "${FILE%.sh}"; \
 	done
-	
-	
+
+# Add android cmd-line tool.
+RUN apt-get update -y && \
+	apt-get install -y wget unzip && \
+    	wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip && \
+    	mkdir -p /opt/android-sdk && \
+    	unzip commandlinetools-linux-7302050_latest.zip -d /opt/android-sdk && \
+    	rm commandlinetools-linux-7302050_latest.zip && \
+    	mkdir /opt/tools && \
+    	mv /opt/android-sdk/cmdline-tools/* /opt/tools && \
+    	mv /opt/tools/ /opt/android-sdk/cmdline-tools/ && \
+    	yes | /opt/android-sdk/cmdline-tools/tools/bin/sdkmanager --licenses
+
 # Configures scheduled jobs.
 #COPY cron /etc/cron.d
 #RUN chmod -R 0644 /etc/cron.d/ && \
