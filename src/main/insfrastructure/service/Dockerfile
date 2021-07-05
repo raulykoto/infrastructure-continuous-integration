@@ -2,7 +2,7 @@
 FROM coldis/infrastructure-service-cluster-cli AS service-cluster-cli
 
 # From Jenkins.
-FROM jenkins/jenkins:2.271-jdk11
+FROM jenkins/jenkins:2.291-jdk11
 
 # Sets the user to root.
 USER root

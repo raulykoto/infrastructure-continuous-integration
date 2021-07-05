@@ -145,14 +145,26 @@ EOF
 fi
 
 
-# If there Docker information.
-if env | grep "DOCKER_USER_NAME=" && [ ! -z "${DOCKER_USER_NAME}" ]
+# If there is public Docker information.
+if env | grep "DOCKER_PUBLIC_USER_NAME=" && [ ! -z "${DOCKER_PUBLIC_USER_NAME}" ]
 then
 
 	# Logs in the Docker repository.
 	${DEBUG} && echo "Logging in the docker repository"
-	docker login -u ${DOCKER_USER_NAME} \
-		-p ${DOCKER_USER_PASSWORD} ${DOCKER_REPOSITORY_URL} || \
+	docker login -u ${DOCKER_PUBLIC_USER_NAME} \
+		-p ${DOCKER_PUBLIC_USER_PASSWORD} || \
+	echo "Docker login failed."
+
+fi
+
+# If there is private Docker information.
+if env | grep "DOCKER_PRIVATE_USER_NAME=" && [ ! -z "${DOCKER_PRIVATE_USER_NAME}" ]
+then
+
+	# Logs in the Docker repository.
+	${DEBUG} && echo "Logging in the docker repository"
+	docker login -u ${DOCKER_PRIVATE_USER_NAME} \
+		-p ${DOCKER_PRIVATE_USER_PASSWORD} ${DOCKER_PRIVATE_REPOSITORY_URL} || \
 	echo "Docker login failed."
 
 fi
