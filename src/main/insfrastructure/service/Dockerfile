@@ -22,11 +22,11 @@ RUN rm -f /usr/share/locale/locale.alias && \
 # Installs basic tools and languages.
 RUN apt-get update -y && \
 	apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common && \
+	apt-transport-https \
+	ca-certificates \
+	curl \
+	gnupg-agent \
+	software-properties-common && \
 	apt-get remove -y docker docker.io && \
 	curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
 	add-apt-repository -y \
@@ -66,6 +66,22 @@ RUN apt-get update -y && \
 	apt-get clean -y && \
 	rm -rf /var/lib/apt/lists/*
 	
+# Add android cmd-line tool.
+RUN apt-get update -y && \
+	apt-get install -y wget unzip && \
+	wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip && \
+	mkdir -p /opt/android-sdk && \
+		unzip commandlinetools-linux-7302050_latest.zip -d /opt/android-sdk && \
+	rm commandlinetools-linux-7302050_latest.zip && \
+	mkdir /opt/tools && \
+	mv /opt/android-sdk/cmdline-tools/* /opt/tools && \
+	mv /opt/tools/ /opt/android-sdk/cmdline-tools/ && \
+	yes | /opt/android-sdk/cmdline-tools/tools/bin/sdkmanager --licenses && \
+	cd /opt/android-sdk/cmdline-tools/tools/bin/ && \
+	./sdkmanager "platforms;android-30" "build-tools;30.0.2" "extras;google;m2repository"
+ENV ANDROID_HOME=/opt/android-sdk/
+
+	
 # Installs service cluster CLI.
 ENV DCOS_VERSION="latest"
 COPY --from=service-cluster-cli /opt/dcos-script/ /opt/dcos-script/
@@ -92,21 +108,6 @@ RUN chown -R jenkins:jenkins ${JENKINS_SCRIPT} && \
 		mv -- "${FILE}" "${FILE%.sh}"; \
 	done
 
-# Add android cmd-line tool.
-RUN apt-get update -y && \
-	apt-get install -y wget unzip && \
-	wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip && \
-	mkdir -p /opt/android-sdk && \
-    	unzip commandlinetools-linux-7302050_latest.zip -d /opt/android-sdk && \
-	rm commandlinetools-linux-7302050_latest.zip && \
-	mkdir /opt/tools && \
-	mv /opt/android-sdk/cmdline-tools/* /opt/tools && \
-	mv /opt/tools/ /opt/android-sdk/cmdline-tools/ && \
-	yes | /opt/android-sdk/cmdline-tools/tools/bin/sdkmanager --licenses && \
-	cd /opt/android-sdk/cmdline-tools/tools/bin/ && \
-	./sdkmanager "platforms;android-30" "build-tools;30.0.2" "extras;google;m2repository"
-
-ENV ANDROID_HOME=/opt/android-sdk/
 
 # Configures scheduled jobs.
 #COPY cron /etc/cron.d
@@ -125,8 +126,8 @@ WORKDIR /var/jenkins_home
 RUN mkdir -p .m2 secrets
 
 # Configures Java memory.
-ENV JAVA_OPTS="-Xms128m -Xmx5g -XX:MaxDirectMemorySize=5g"
-ENV MAVEN_OPTS="-Xms128m -Xmx5g -XX:MaxDirectMemorySize=5g"
+ENV JAVA_OPTS="-Xms512m -Xmx13g"
+ENV MAVEN_OPTS="-Xms512m -Xmx13g"
 
 # Installs plugins.
 COPY config/plugins.conf /usr/share/jenkins/ref/plugins.conf
