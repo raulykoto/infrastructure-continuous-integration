@@ -71,7 +71,7 @@ RUN apt-get update -y && \
 	apt-get install -y wget unzip && \
 	wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip && \
 	mkdir -p /opt/android-sdk && \
-    	unzip commandlinetools-linux-7302050_latest.zip -d /opt/android-sdk && \
+	unzip commandlinetools-linux-7302050_latest.zip -d /opt/android-sdk && \
 	rm commandlinetools-linux-7302050_latest.zip && \
 	mkdir /opt/tools && \
 	mv /opt/android-sdk/cmdline-tools/* /opt/tools && \
