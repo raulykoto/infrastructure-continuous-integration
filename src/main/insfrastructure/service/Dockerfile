@@ -71,14 +71,15 @@ RUN apt-get update -y && \
 	apt-get install -y wget unzip && \
 	wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip && \
 	mkdir -p /opt/android-sdk && \
-		unzip commandlinetools-linux-7302050_latest.zip -d /opt/android-sdk && \
+    	unzip commandlinetools-linux-7302050_latest.zip -d /opt/android-sdk && \
 	rm commandlinetools-linux-7302050_latest.zip && \
 	mkdir /opt/tools && \
 	mv /opt/android-sdk/cmdline-tools/* /opt/tools && \
 	mv /opt/tools/ /opt/android-sdk/cmdline-tools/ && \
 	yes | /opt/android-sdk/cmdline-tools/tools/bin/sdkmanager --licenses && \
 	cd /opt/android-sdk/cmdline-tools/tools/bin/ && \
-	./sdkmanager "platforms;android-30" "build-tools;30.0.2" "extras;google;m2repository"
+	./sdkmanager "platforms;android-30" "platforms;android-31" "build-tools;30.0.2" "extras;google;m2repository"
+
 ENV ANDROID_HOME=/opt/android-sdk/
 
 	
