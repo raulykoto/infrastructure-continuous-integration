@@ -132,8 +132,8 @@ WORKDIR /var/jenkins_home
 RUN mkdir -p .m2 secrets
 
 # Configures Java memory.
-ENV JAVA_OPTS="-Xms512m -Xmx13g"
-ENV MAVEN_OPTS="-Xms512m -Xmx13g"
+ENV JAVA_OPTS="-Xms512m -Xmx17g"
+ENV MAVEN_OPTS="-Xms512m -Xmx17g"
 
 # Entrypoint.
 ENTRYPOINT [ "jenkins_init" ]
