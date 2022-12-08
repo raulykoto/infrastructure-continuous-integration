@@ -31,7 +31,6 @@ RUN apt-get update -y && \
 		"deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
 	apt-get update -y && \
 	apt-get install -y docker-ce docker-ce-cli && \
-	apt-get install docker-compose-plugin && \
 	usermod -aG docker jenkins && \
 	systemctl enable docker && \
 	apt-get install -y jq cron gosu zip unzip jq git && \
