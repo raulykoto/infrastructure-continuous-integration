@@ -76,7 +76,7 @@ RUN apt-get update -y && \
 	mv /opt/tools/ /opt/android-sdk/cmdline-tools/ && \
 	yes | /opt/android-sdk/cmdline-tools/tools/bin/sdkmanager --licenses && \
 	cd /opt/android-sdk/cmdline-tools/tools/bin/ && \
-	./sdkmanager "platforms;android-30" "platforms;android-31" "build-tools;30.0.2" "extras;google;m2repository"
+	./sdkmanager "platforms;android-30" "platforms;android-31" "platforms;android-33" "build-tools;30.0.2" "build-tools;33.0.1" "extras;google;m2repository"
 
 ENV ANDROID_HOME=/opt/android-sdk/
 
