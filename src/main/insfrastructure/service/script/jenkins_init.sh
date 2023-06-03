@@ -44,7 +44,7 @@ ${DEBUG} && echo "Running 'jenkins_init'"
 jenkins_configure ${DEBUG_OPT}
 
 # Executes the main process.
-/sbin/tini -- /usr/local/bin/jenkins.sh
+/usr/bin/tini -- /usr/local/bin/jenkins.sh
 
 
 
