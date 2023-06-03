@@ -1,8 +1,8 @@
 # From service cluster CLI.
-FROM coldis/infrastructure-service-cluster-cli:1.1 AS service-cluster-cli
+FROM coldis/infrastructure-service-cluster-cli:1.2 AS service-cluster-cli
 
 # From Jenkins.
-FROM jenkins/jenkins:2.333-jdk11
+FROM jenkins/jenkins:2.401.1-lts-jdk17
 
 # Sets the user to root.
 USER root
@@ -119,9 +119,9 @@ RUN chown -R jenkins:jenkins ${JENKINS_SCRIPT} && \
 #	service cron start
 
 # Installs plugins.
-COPY config/plugins.conf /usr/share/jenkins/ref/plugins.conf
-RUN chown jenkins /usr/share/jenkins/ref/plugins.conf && \
-	/usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.conf
+COPY config/plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN chown jenkins /usr/share/jenkins/ref/plugins.txt && \
+	jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 	
 # Sets the user back to Jenkins.
 USER jenkins
