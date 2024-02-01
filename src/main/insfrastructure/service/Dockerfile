@@ -91,6 +91,7 @@ RUN	chmod +x /opt/dcos-script/*.sh && \
 	
 # Copies operational scripts.
 COPY --from=service-cluster-cli /opt/operational-utils-script/ /opt/operational-utils-script/
+COPY operational_utils_docker_build_modules.sh /opt/operational-utils-script/utils/script/
 RUN	chmod +x /opt/operational-utils-script/utils/script/*.sh && \
 	chown -R jenkins:jenkins /opt/operational-utils-script/utils/script/ && \
 	ln -s /opt/operational-utils-script/utils/script/*.sh /usr/bin && \
