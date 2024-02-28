@@ -2,7 +2,7 @@
 FROM coldis/infrastructure-service-cluster-cli:1.2 AS service-cluster-cli
 
 # From Jenkins.
-FROM jenkins/jenkins:2.401.1-lts-jdk17
+FROM jenkins/jenkins:2.445-jdk21
 
 # Sets the user to root.
 USER root
@@ -33,12 +33,13 @@ RUN apt-get update -y && \
 	apt-get install -y docker-ce docker-ce-cli && \
 	usermod -aG docker jenkins && \
 	systemctl enable docker && \
-	apt-get install -y jq cron gosu zip unzip jq git && \
+	apt-get install -y jq cron gosu zip unzip jq git netcat-openbsd && \
 	apt-get install -y maven && \
-	apt-get install -y python3 python3-pip && \
-	pip3 install twine && \
-	curl -sL https://deb.nodesource.com/setup_12.x | bash - && \	
-	apt-get install -y nodejs && \
+	apt-get install -y python3-pip && \
+	pip3 install twine --break-system-packages && \
+	twine --version && \
+	curl -sL https://deb.nodesource.com/setup_18.x | bash - && \	
+	apt-get -y update && apt-get -y install nodejs && \
 	npm cache clean -f && \
 	npm install -g n && \
 	apt-get autoremove -y && \
