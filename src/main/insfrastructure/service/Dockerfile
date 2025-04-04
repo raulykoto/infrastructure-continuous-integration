@@ -103,7 +103,7 @@ RUN mkdir -p ${JENKINS_SCRIPT}
 COPY script ${JENKINS_SCRIPT}
 RUN chown -R jenkins:jenkins ${JENKINS_SCRIPT} && \
 	ln -s ${JENKINS_SCRIPT}/*.sh /usr/bin && \
-	for FILE in /usr/bin/jenkins*.sh; \
+	for FILE in /usr/bin/*.sh; \
 	do \
 		chown jenkins:jenkins ${FILE} && \	
 		mv -- "${FILE}" "${FILE%.sh}"; \
